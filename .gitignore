@@ -1,0 +1,104 @@
+# ============================================================
+# Louisbourg Archaeological LiDAR Explorer
+# ============================================================
+
+
+# ------------------------------------------------------------
+# LARGE / LOCAL GIS DATA
+# ------------------------------------------------------------
+
+# Raw data
+data/raw/**
+!data/raw/**/
+!data/raw/**/.gitkeep
+
+# Intermediate processing data
+data/staging/**
+!data/staging/**/
+!data/staging/**/.gitkeep
+
+# Derived geospatial data
+data/processed/**
+!data/processed/**/
+!data/processed/**/.gitkeep
+
+
+# ------------------------------------------------------------
+# ARCGIS PRO
+# ------------------------------------------------------------
+
+# File geodatabases
+*.gdb/
+
+# LAS datasets - recreated through ArcPy
+*.lasd
+
+# Raw point clouds
+*.las
+*.laz
+*.zlas
+
+# Large raster datasets
+*.tif
+*.tiff
+*.img
+
+# ArcGIS locks
+*.lock
+*.sr.lock
+
+# Temporary / backup files
+*.tmp
+*.bak
+
+# ArcGIS package/cache files
+*.ppkx
+*.mpkx
+*.lpkx
+*.slpk
+
+
+# ------------------------------------------------------------
+# UNITY
+# ------------------------------------------------------------
+
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+[Bb]uild/
+[Bb]uilds/
+
+# IDE-generated Unity files
+.vs/
+.idea/
+
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+
+
+# ------------------------------------------------------------
+# VIDEO / LARGE OUTPUTS
+# ------------------------------------------------------------
+
+outputs/video/**
+!outputs/video/**/
+!outputs/video/**/.gitkeep
+
+
+# ------------------------------------------------------------
+# OPERATING SYSTEM
+# ------------------------------------------------------------
+
+.DS_Store
+Thumbs.db
+desktop.ini
