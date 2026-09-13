@@ -104,7 +104,18 @@ This distinction preserves physical point-return classification while
 allowing archaeological structures to be represented separately as
 semantic GIS features.
 
-Road and walkway classification QA is currently in progress.
+Road and walkway areas were also reviewed against the Nova Scotia Road
+Network (NSRN), 2024 orthophotography, and the LiDAR point cloud. Most
+transportation surfaces within the study area are unpaved dirt or cleared
+ground and were already classified as LAS Class 2 (Ground).
+
+Because these classifications were technically consistent with the
+physical surfaces represented by the LiDAR returns, no road-surface
+reclassification was applied.
+
+The QA/QC approach therefore prioritizes correction only where the
+existing classification is demonstrably inconsistent with the observed
+surface.
 
 ## Project Structure
 
@@ -151,11 +162,12 @@ from version control.
 - Conversion from LAZ to editable LAS
 - Building-footprint digitization
 - Selective building reclassification to LAS Class 6
+- Road and walkway classification review
+- 2024 orthophoto integration for QA/QC
 
 ### In Progress
 
-- Orthophoto integration
-- Road and walkway QA/reclassification
+- Historical orthophoto acquisition for RGB LiDAR colorization
 
 ### Planned
 
