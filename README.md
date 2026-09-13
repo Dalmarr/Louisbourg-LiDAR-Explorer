@@ -51,12 +51,15 @@ Source classifications included:
 
 Nova Scotia Orthophotomap Database (NSODB).
 
-Used for:
+Current imagery over the study area was acquired in 2024 and is used for:
 
 - LiDAR QA/QC
-- feature validation
+- building and feature validation
 - road and walkway delineation
-- planned RGB point-cloud colorization
+- spatial alignment checks
+
+Historical imagery closer to the 2018 LiDAR acquisition date is being
+evaluated for final RGB point-cloud colorization.
 
 ### Transportation
 
