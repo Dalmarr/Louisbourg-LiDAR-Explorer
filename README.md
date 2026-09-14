@@ -4,14 +4,27 @@ An interactive 3D GIS project exploring the archaeological landscape of
 the Fortress of Louisbourg National Historic Site, Nova Scotia, using
 airborne LiDAR, ArcGIS Pro, and the ArcGIS Maps SDK for Unity.
 
+![Louisbourg point cloud in Unity](outputs/screenshots/louisbourg_unity_pointcloud.png)
+
 ## Project Overview
 
-The project develops an end-to-end LiDAR and 3D GIS workflow from raw
-airborne point-cloud data through GIS processing and quality assurance
-to an interactive Unity-based visualization.
+The project develops an end-to-end 3D geospatial workflow from raw
+airborne LiDAR through GIS processing, quality assurance, scene-layer
+generation, and interactive visualization in Unity.
 
 The study area includes the reconstructed Fortress of Louisbourg and
 its surrounding archaeological landscape.
+
+The project is designed to demonstrate practical experience with:
+
+- LiDAR and point-cloud QA/QC
+- LAS classification and editing
+- coordinate and vertical reference systems
+- terrain generation
+- ArcGIS 3D scene workflows
+- I3S / Point Cloud Scene Layers
+- ArcGIS Maps SDK for Unity
+- 3D GIS application development
 
 ## Technology
 
@@ -38,7 +51,7 @@ Initial source dataset:
 - Horizontal reference: NAD 1983 (CSRS) UTM Zone 20N
 - Vertical reference: CGVD2013
 
-Source classifications included:
+Original source classifications included:
 
 - Class 2 — Ground
 - Class 3 — Low Vegetation
@@ -55,67 +68,141 @@ Current imagery over the study area was acquired in 2024 and is used for:
 
 - LiDAR QA/QC
 - building and feature validation
-- road and walkway delineation
 - spatial alignment checks
+- planned RGB point-cloud colorization
 
-Historical imagery closer to the 2018 LiDAR acquisition date is being
-evaluated for final RGB point-cloud colorization.
+The 2024 orthophoto tile covering the primary project area is:
+
+`1045850059900`
+
+The imagery postdates the LiDAR acquisition by six years. This temporal
+difference will be retained in the project metadata and considered during
+RGB colorization and QA.
 
 ### Transportation
 
-Nova Scotia Road Network (NSRN).
+The Nova Scotia Road Network (NSRN) was reviewed as an authoritative
+transportation reference within the study area.
 
-Used as an authoritative reference for road-centreline geometry within
-the study area.
+The network generally aligned with the 2024 orthophotography, although
+some road and path geometry differed from current visible conditions.
 
-## LiDAR Processing Workflow
+## LiDAR QA/QC
 
-Raw provincial LAZ
-→ LAS Dataset
-→ initial QA/QC
-→ archaeological Area of Interest
-→ Extract LAS
-→ editable uncompressed LAS
-→ classification correction
-→ RGB colorization
-→ point-cloud scene layer
-→ ArcGIS Maps SDK for Unity
+Initial inspection identified apparent classification anomalies within
+the reconstructed fortress.
 
-## QA/QC and Classification
-
-Initial inspection identified several apparent classification anomalies
-within the reconstructed fortress.
-
-Elevated returns associated with non-vegetated buildings had been
-classified primarily as medium or high vegetation. Building footprints
-were digitized using imagery and elevation structure as independent
+Several non-vegetated building surfaces had been classified as medium or
+high vegetation. Building footprints were digitized using orthophotography,
+LiDAR elevation structure, and visual interpretation as independent
 reference information.
 
-An editable LAS working dataset was created from the original compressed
-LAZ source data. Confirmed building returns were selectively reclassified
-to LAS Class 6 (Building).
+Because the original compressed LAZ files could not be edited directly,
+the project AOI was extracted to uncompressed LAS working files. Confirmed
+building returns were then selectively reclassified to:
+
+**LAS Class 6 — Building**
 
 Grass-covered fortification surfaces, including portions of the King's
 Bastion, were intentionally excluded from blanket building
-reclassification because the LiDAR returns represent vegetation even
-where that vegetation forms part of a built heritage structure.
+reclassification because the actual LiDAR returns represent vegetation
+even where the vegetation forms part of a built heritage structure.
 
-This distinction preserves physical point-return classification while
-allowing archaeological structures to be represented separately as
-semantic GIS features.
+This preserves the distinction between:
 
-Road and walkway areas were also reviewed against the Nova Scotia Road
-Network (NSRN), 2024 orthophotography, and the LiDAR point cloud. Most
-transportation surfaces within the study area are unpaved dirt or cleared
-ground and were already classified as LAS Class 2 (Ground).
+- the physical surface represented by a LiDAR return; and
+- the semantic meaning of the archaeological feature.
 
-Because these classifications were technically consistent with the
-physical surfaces represented by the LiDAR returns, no road-surface
-reclassification was applied.
+Road and walkway areas were also reviewed against the NSRN,
+orthophotography, and point cloud. Most transportation surfaces within
+the site are unpaved dirt or cleared ground and were already classified
+as:
 
-The QA/QC approach therefore prioritizes correction only where the
-existing classification is demonstrably inconsistent with the observed
-surface.
+**LAS Class 2 — Ground**
+
+Because this classification accurately represents the measured surface,
+no road-surface reclassification was applied.
+
+The QA/QC workflow therefore prioritizes correction only where the source
+classification is demonstrably inconsistent with the observed surface.
+
+## Terrain Processing
+
+A focused project Area of Interest was extracted from the original
+provincial LiDAR coverage.
+
+Ground-classified returns were used to generate a:
+
+**1 metre bare-earth Digital Elevation Model**
+
+The DEM provides a terrain surface independent of buildings and
+vegetation and will support later terrain visualization and Unity
+elevation integration.
+
+## Coordinate System and Scene Preparation
+
+The source LiDAR uses:
+
+- NAD 1983 (CSRS) UTM Zone 20N for horizontal coordinates
+- CGVD2013 for elevations
+
+During Point Cloud Scene Layer preparation, the source vertical
+coordinate system required an explicit recognized definition for scene
+layer generation.
+
+A scene-ready LAS Dataset was therefore created using:
+
+- Horizontal CRS: NAD 1983 (CSRS) UTM Zone 20N — WKID 2961
+- Vertical CRS: CGVD2013(CGG2013) height — WKID 6647
+
+The underlying point coordinates were not transformed. The explicit
+spatial-reference definition was added so the scene-layer workflow could
+correctly validate the relationship between horizontal and vertical
+units.
+
+## Point Cloud Scene Layer
+
+The processed LiDAR was packaged in ArcGIS Pro as a local Point Cloud
+Scene Layer Package (`.slpk`).
+
+Cached point attributes include:
+
+- classification code
+- intensity
+- return information
+
+The resulting scene layer was validated in an ArcGIS Pro Local Scene
+before being transferred to Unity.
+
+Large generated scene packages and source geospatial datasets are not
+stored in the Git repository.
+
+## ArcGIS Maps SDK for Unity
+
+The Point Cloud Scene Layer was successfully integrated into Unity using
+the ArcGIS Maps SDK for Unity.
+
+The Unity scene currently uses:
+
+- a Local ArcGIS Map
+- the same projected spatial reference as the source GIS data
+- a local Point Cloud Scene Layer Package
+- an ArcGIS-aware camera
+- no external basemap or online elevation dependency
+
+The initial integration confirmed that the processed Louisbourg point
+cloud can be rendered at its real-world scale and location directly from
+the ArcGIS scene-layer workflow.
+
+This establishes the working pipeline:
+
+Raw LAZ  
+→ LAS Dataset  
+→ QA/QC and classification correction  
+→ AOI extraction  
+→ bare-earth terrain  
+→ Point Cloud Scene Layer  
+→ ArcGIS Maps SDK for Unity
 
 ## Project Structure
 
@@ -158,30 +245,42 @@ from version control.
 - Project and repository setup
 - 2018 provincial LiDAR acquisition
 - LAS Dataset creation and initial QA/QC
-- Study-area extraction
+- Focused archaeological AOI definition
+- AOI extraction
 - Conversion from LAZ to editable LAS
 - Building-footprint digitization
 - Selective building reclassification to LAS Class 6
 - Road and walkway classification review
 - 2024 orthophoto integration for QA/QC
+- 1 m bare-earth DEM generation
+- Scene-ready horizontal and vertical CRS preparation
+- Point Cloud Scene Layer Package generation
+- ArcGIS Pro Local Scene validation
+- Successful ArcGIS Maps SDK for Unity integration
+- Local Unity camera and projected map configuration
 
 ### In Progress
 
-- Historical orthophoto acquisition for RGB LiDAR colorization
+- Acquisition of 2024 orthophoto GeoTIFF
+- RGB LiDAR colorization
+- Local terrain integration in Unity
 
 ### Planned
 
-- RGB LiDAR colorization
-- Bare-earth terrain generation
-- Terrain derivatives and archaeological visualization
-- Point Cloud Scene Layer creation
-- ArcGIS Maps SDK for Unity integration
-- Interactive 3D controls and layer switching
-- Public-facing project demonstration
+- Final RGB Point Cloud Scene Layer
+- Unity terrain/elevation surface
+- navigation and camera controls
+- analytical layer and visualization controls
+- project UI and interaction design
+- public-facing project demonstration
+- technical workflow documentation
 
 ## Goal
 
 The final application will provide an interactive 3D exploration of
-Louisbourg using processed LiDAR and contextual GIS data, demonstrating
-a workflow spanning point-cloud QA/QC, terrain processing, 3D GIS,
-scene-layer delivery, and custom Unity development.
+Louisbourg using measured LiDAR, derived terrain, and contextual GIS
+data.
+
+The project demonstrates a workflow spanning source-data QA/QC,
+coordinate-system management, point-cloud processing, terrain modelling,
+3D GIS delivery, and custom Unity application development.
