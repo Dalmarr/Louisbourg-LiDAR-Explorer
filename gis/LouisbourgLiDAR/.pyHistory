@@ -1,0 +1,4 @@
+﻿import sys
+sys.path.append(r"F:\WORK\GIS Projects\LouisbourgLiDAR\scripts\python")
+import main
+main.main()
